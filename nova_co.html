@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA & CO. | Simple things. Better living.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        stone: { 50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 300: '#d6d3d1', 400: '#a8a29e', 500: '#78716c', 600: '#57534e', 700: '#44403c', 800: '#292524', 900: '#1c1917' },
+                        amber: { 500: '#f59e0b', 700: '#b45309' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        .toast-enter { animation: slideIn 0.3s ease-out forwards; }
+        .toast-exit { animation: fadeOut 0.3s ease-out forwards; }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fafaf9; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+        
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* Hide number input spinners */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 flex flex-col min-h-screen">
+
+    <!-- Store Navigation -->
+    <nav id="store-nav" class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-stone-100 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-1 flex items-center md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 text-stone-600">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <div class="flex-1 md:flex-none flex justify-center md:justify-start">
+                    <a href="#/" class="text-2xl font-bold tracking-tighter text-stone-900">NOVA & CO.</a>
+                </div>
+                <div class="hidden md:flex flex-1 justify-center space-x-10">
+                    <a href="#/" class="nav-link text-stone-500 hover:text-stone-900 transition-colors font-medium" data-path="/">Home</a>
+                    <a href="#/shop" class="nav-link text-stone-500 hover:text-stone-900 transition-colors font-medium" data-path="/shop">Shop</a>
+                    <a href="#/shop" class="nav-link text-stone-500 hover:text-stone-900 transition-colors font-medium" data-path="/collections">Collections</a>
+                </div>
+                <div class="flex-1 flex justify-end items-center space-x-4">
+                    <a href="#/shop" class="p-2 text-stone-600 hover:text-stone-900 hidden sm:block"><i data-lucide="search" class="w-5 h-5"></i></a>
+                    <a href="#/account" class="p-2 text-stone-600 hover:text-stone-900"><i data-lucide="user" class="w-5 h-5"></i></a>
+                    <a href="#/cart" class="p-2 text-stone-600 hover:text-stone-900 relative">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span id="cart-badge" class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-amber-700 rounded-full hidden">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-stone-100 p-4 flex flex-col space-y-4 shadow-lg absolute w-full">
+            <a href="#/" class="text-stone-900 font-medium">Home</a>
+            <a href="#/shop" class="text-stone-900 font-medium">Shop</a>
+            <a href="#/account" class="text-stone-900 font-medium">Account</a>
+        </div>
+    </nav>
+
+    <!-- App Container -->
+    <div id="app-container" class="flex-grow flex flex-col w-full h-full">
+        <!-- Rendered views will go here -->
+    </div>
+
+    <!-- Store Footer -->
+    <footer id="store-footer" class="bg-stone-900 text-stone-300 py-16 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-1">
+                <h3 class="text-white text-xl font-bold tracking-tighter mb-4">NOVA & CO.</h3>
+                <p class="text-stone-400 text-sm leading-relaxed mb-6">Simple things. Better living. Thoughtfully selected essentials for your desk, home, and everyday life.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Shop</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#/shop" class="hover:text-white transition-colors">All Products</a></li>
+                    <li><a href="#/shop?cat=Home" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="#/shop?cat=Desk" class="hover:text-white transition-colors">Desk</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Support</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping & Returns</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Admin</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#/admin" class="text-amber-500 hover:text-amber-400 transition-colors flex items-center"><i data-lucide="settings" class="w-4 h-4 mr-2"></i> Store Dashboard</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-stone-800 text-sm text-stone-500 flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; <span id="year"></span> NOVA & CO. Demo Portfolio Project.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        const INITIAL_PRODUCTS = [
+            { id: '1', name: 'Minimal Ceramic Mug', description: 'Hand-finished ceramic mug designed for your morning coffee or afternoon tea.', price: 18.00, category: 'Home', sku: 'NOVA-H001', stock: 24, rating: 4.8, reviews: 12, image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&q=80&w=600', featured: true, sale: false },
+            { id: '2', name: 'Matte Black Tumbler', description: 'Insulated stainless steel tumbler keeps drinks cold for 24 hours or hot for 12.', price: 28.00, category: 'Drinkware', sku: 'NOVA-D001', stock: 15, rating: 4.9, reviews: 34, image: 'https://images.unsplash.com/photo-1618365908648-718d461536c5?auto=format&fit=crop&q=80&w=600', featured: false, sale: true },
+            { id: '3', name: 'Soy Wax Candle - Sandalwood', description: 'Hand-poured soy candle with a wooden wick. Burn time: 40 hours.', price: 24.00, category: 'Home', sku: 'NOVA-H002', stock: 8, rating: 4.5, reviews: 8, image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&q=80&w=600', featured: true, sale: false },
+            { id: '4', name: 'Oak Desk Organizer', description: 'Solid oak organizer for pens, clips, and your phone. Keeps your workspace tidy.', price: 45.00, category: 'Desk', sku: 'NOVA-DK001', stock: 5, rating: 4.7, reviews: 19, image: 'https://images.unsplash.com/photo-1595225306915-08e1a8bb2839?auto=format&fit=crop&q=80&w=600', featured: true, sale: false },
+            { id: '5', name: 'Heavyweight Canvas Tote', description: 'Durable cotton canvas tote bag, perfect for groceries or a laptop.', price: 22.00, category: 'Gifts', sku: 'NOVA-G001', stock: 40, rating: 4.6, reviews: 22, image: 'https://images.unsplash.com/photo-1597484661643-2f5fef640df1?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '6', name: 'Linen Bound Notebook', description: 'Lay-flat dot grid notebook with a premium linen cover. 160 pages.', price: 16.00, category: 'Desk', sku: 'NOVA-DK002', stock: 0, rating: 4.9, reviews: 45, image: 'https://images.unsplash.com/photo-1531346878377-a541e4ab69e5?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '7', name: 'Ribbed Glass Vase', description: 'Minimalist clear glass vase, perfect for dried flowers or fresh stems.', price: 32.00, category: 'Home', sku: 'NOVA-H003', stock: 12, rating: 4.4, reviews: 6, image: 'https://images.unsplash.com/photo-1580975618210-9171f25f23bc?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '8', name: 'Waffle Knit Throw Blanket', description: '100% cotton waffle knit blanket. Lightweight and cozy.', price: 68.00, category: 'Home', sku: 'NOVA-H004', stock: 18, rating: 5.0, reviews: 11, image: 'https://images.unsplash.com/photo-1585521550974-9b2f676b701c?auto=format&fit=crop&q=80&w=600', featured: true, sale: false },
+            { id: '9', name: 'Concrete Planter', description: 'Small concrete planter with drainage hole. Ideal for succulents.', price: 14.00, category: 'Home', sku: 'NOVA-H005', stock: 30, rating: 4.3, reviews: 15, image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&q=80&w=600', featured: false, sale: true },
+            { id: '10', name: 'Brass Pen Set', description: 'Set of two solid brass gel pens. Weighted for comfortable writing.', price: 38.00, category: 'Desk', sku: 'NOVA-DK003', stock: 22, rating: 4.8, reviews: 29, image: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '11', name: 'Leather Cable Organizer', description: 'Keep your charging cables neat with this genuine leather roll.', price: 26.00, category: 'Desk', sku: 'NOVA-DK004', stock: 14, rating: 4.5, reviews: 18, image: 'https://images.unsplash.com/photo-1620228892408-724f5a2b005f?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '12', name: 'Felt Desk Mat', description: 'Premium wool felt desk pad. Protects your desk and warms up your space.', price: 34.00, category: 'Desk', sku: 'NOVA-DK005', stock: 2, rating: 4.7, reviews: 52, image: 'https://images.unsplash.com/photo-1615569427329-843813ff16bc?auto=format&fit=crop&q=80&w=600', featured: true, sale: false },
+            { id: '13', name: 'Borosilicate Glass Bottle', description: 'Sleek glass water bottle with a bamboo lid and silicone sleeve.', price: 20.00, category: 'Drinkware', sku: 'NOVA-D002', stock: 19, rating: 4.6, reviews: 24, image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '14', name: 'Ceramic Travel Cup', description: 'Reusable ceramic cup with a spill-proof silicone lid.', price: 25.00, category: 'Drinkware', sku: 'NOVA-D003', stock: 11, rating: 4.2, reviews: 14, image: 'https://images.unsplash.com/photo-1554522967-873611388bf3?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '15', name: 'Curated Gift Box', description: 'A perfect gift set including a mug, coffee beans, and a small candle.', price: 55.00, category: 'Gifts', sku: 'NOVA-G002', stock: 10, rating: 4.9, reviews: 9, image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600', featured: true, sale: false },
+            { id: '16', name: 'Sunday Self-Care Kit', description: 'Bath salts, body oil, and a face mask in a beautiful linen pouch.', price: 48.00, category: 'Gifts', sku: 'NOVA-G003', stock: 7, rating: 4.8, reviews: 16, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '17', name: 'Mini Candle Set', description: 'Trio of our best-selling scents in 2oz travel tins.', price: 30.00, category: 'Gifts', sku: 'NOVA-G004', stock: 16, rating: 4.6, reviews: 21, image: 'https://images.unsplash.com/photo-1608181186105-0e7845348bb9?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '18', name: 'Stationery Bundle', description: 'Two notebooks, a pen set, and assorted greeting cards.', price: 42.00, category: 'Gifts', sku: 'NOVA-G005', stock: 9, rating: 4.7, reviews: 13, image: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=600', featured: false, sale: true },
+            { id: '19', name: 'Speckled Ceramic Plate', description: 'Handmade dinner plate with a matte speckled glaze.', price: 26.00, category: 'Home', sku: 'NOVA-H006', stock: 20, rating: 4.5, reviews: 10, image: 'https://images.unsplash.com/photo-1616781216666-857e4e16dff5?auto=format&fit=crop&q=80&w=600', featured: false, sale: false },
+            { id: '20', name: 'Linen Napkin Set', description: 'Set of four washed linen napkins in natural oatmeal.', price: 32.00, category: 'Home', sku: 'NOVA-H007', stock: 14, rating: 4.8, reviews: 17, image: 'https://images.unsplash.com/photo-1584288019623-289b4f2c5e53?auto=format&fit=crop&q=80&w=600', featured: false, sale: false }
+        ];
+
+        const State = {
+            products: [],
+            cart: [],
+            orders: [],
+            
+            init() {
+                const p = localStorage.getItem('nova_products');
+                const c = localStorage.getItem('nova_cart');
+                const o = localStorage.getItem('nova_orders');
+                
+                this.products = p ? JSON.parse(p) : INITIAL_PRODUCTS;
+                this.cart = c ? JSON.parse(c) : [];
+                this.orders = o ? JSON.parse(o) : [];
+                
+                if (!p) this.save('products');
+                this.updateCartBadge();
+            },
+            
+            save(key) {
+                localStorage.setItem(`nova_${key}`, JSON.stringify(this[key]));
+            },
+            
+            addToCart(productId, qty = 1) {
+                const product = this.products.find(p => p.id === productId);
+                if (!product || product.stock < 1) return showToast('Out of stock', 'error');
+                
+                const existing = this.cart.find(i => i.product.id === productId);
+                if (existing) {
+                    if (existing.quantity + qty > product.stock) return showToast(`Only ${product.stock} available`, 'error');
+                    existing.quantity += qty;
+                } else {
+                    if (qty > product.stock) return showToast(`Only ${product.stock} available`, 'error');
+                    this.cart.push({ product, quantity: qty });
+                }
+                
+                this.save('cart');
+                this.updateCartBadge();
+                showToast('Added to cart');
+            },
+            
+            updateCartQty(productId, qty) {
+                const product = this.products.find(p => p.id === productId);
+                const item = this.cart.find(i => i.product.id === productId);
+                if (!item) return;
+                
+                if (qty > product.stock) return showToast(`Only ${product.stock} available`, 'error');
+                if (qty < 1) return this.removeFromCart(productId);
+                
+                item.quantity = qty;
+                this.save('cart');
+                this.updateCartBadge();
+            },
+            
+            removeFromCart(productId) {
+                this.cart = this.cart.filter(i => i.product.id !== productId);
+                this.save('cart');
+                this.updateCartBadge();
+                showToast('Item removed', 'info');
+            },
+            
+            clearCart() {
+                this.cart = [];
+                this.save('cart');
+                this.updateCartBadge();
+            },
+            
+            placeOrder(customer, address) {
+                const total = this.cart.reduce((sum, i) => sum + (i.product.price * i.quantity), 0) * 1.07 + 5;
+                const newOrder = {
+                    id: `NOVA-${Math.floor(Math.random() * 100000)}`,
+                    date: new Date().toISOString(),
+                    customer, address,
+                    items: [...this.cart],
+                    total,
+                    status: 'Processing'
+                };
+                
+                // Decrease inventory
+                this.cart.forEach(cartItem => {
+                    const p = this.products.find(prod => prod.id === cartItem.product.id);
+                    if (p) p.stock -= cartItem.quantity;
+                });
+                
+                this.orders.unshift(newOrder);
+                this.save('orders');
+                this.save('products');
+                this.clearCart();
+                return newOrder.id;
+            },
+            
+            updateProductStock(id, stock) {
+                const p = this.products.find(p => p.id === id);
+                if(p) { p.stock = parseInt(stock) || 0; this.save('products'); }
+            },
+            
+            updateOrderStatus(id, status) {
+                const o = this.orders.find(o => o.id === id);
+                if(o) { o.status = status; this.save('orders'); }
+            },
+
+            saveProduct(productData) {
+                if (productData.id) {
+                    const idx = this.products.findIndex(p => p.id === productData.id);
+                    if(idx > -1) this.products[idx] = { ...this.products[idx], ...productData };
+                } else {
+                    this.products.unshift({ 
+                        ...productData, 
+                        id: Date.now().toString(),
+                        rating: 5.0, reviews: 0
+                    });
+                }
+                this.save('products');
+            },
+
+            deleteProduct(id) {
+                this.products = this.products.filter(p => p.id !== id);
+                this.save('products');
+            },
+            
+            updateCartBadge() {
+                const badge = document.getElementById('cart-badge');
+                if(!badge) return;
+                const count = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        };
+
+        const formatPrice = (price) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const isError = type === 'error';
+            toast.className = `toast-enter flex items-center p-4 rounded-lg shadow-lg text-sm font-medium text-white mb-2 ${isError ? 'bg-red-600' : type === 'info' ? 'bg-blue-600' : 'bg-stone-900'}`;
+            toast.innerHTML = `<i data-lucide="${isError ? 'alert-circle' : 'check'}" class="w-4 h-4 mr-2"></i> ${message}`;
+            container.appendChild(toast);
+            lucide.createIcons({ root: toast });
+            
+            setTimeout(() => {
+                toast.classList.replace('toast-enter', 'toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        const DOM = {
+            app: document.getElementById('app-container'),
+            storeNav: document.getElementById('store-nav'),
+            storeFooter: document.getElementById('store-footer'),
+            mobileMenuBtn: document.getElementById('mobile-menu-btn'),
+            mobileMenu: document.getElementById('mobile-menu')
+        };
+
+        function setStoreLayoutActive() {
+            DOM.storeNav.classList.remove('hidden');
+            DOM.storeFooter.classList.remove('hidden');
+            // Update active nav links
+            const path = '/' + (window.location.hash.slice(2).split('/')[0] || '');
+            document.querySelectorAll('.nav-link').forEach(el => {
+                if(el.dataset.path === path) {
+                    el.classList.add('text-stone-900', 'font-bold');
+                    el.classList.remove('text-stone-500', 'font-medium');
+                } else {
+                    el.classList.add('text-stone-500', 'font-medium');
+                    el.classList.remove('text-stone-900', 'font-bold');
+                }
+            });
+        }
+
+        function router() {
+            const hash = window.location.hash.slice(1) || '/';
+            const parts = hash.split('?')[0].split('/').filter(Boolean);
+            const route = parts[0] || 'home';
+            const param = parts[1];
+            
+            window.scrollTo(0, 0);
+            DOM.mobileMenu.classList.add('hidden');
+            DOM.app.innerHTML = ''; // Clear current view
+
+            if (route === 'admin') {
+                DOM.storeNav.classList.add('hidden');
+                DOM.storeFooter.classList.add('hidden');
+                renderAdminLayout(param || 'dashboard');
+            } else {
+                setStoreLayoutActive();
+                switch(route) {
+                    case 'home': renderHome(); break;
+                    case 'shop': renderShop(); break;
+                    case 'product': renderProduct(param); break;
+                    case 'cart': renderCart(); break;
+                    case 'checkout': renderCheckout(); break;
+                    case 'order-confirmation': renderOrderConfirmation(param); break;
+                    case 'account': renderAccount(); break;
+                    default: renderHome();
+                }
+            }
+            lucide.createIcons();
+        }
+
+        function renderProductCard(product) {
+            return `
+                <div class="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                    <a href="#/product/${product.id}" class="relative aspect-square overflow-hidden bg-stone-100 block">
+                        <img src="${product.image}" alt="${product.name}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy">
+                        ${product.sale ? `<div class="absolute top-3 left-3 bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full text-xs font-medium">Sale</div>` : ''}
+                        ${product.stock === 0 ? `<div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center"><span class="bg-stone-900 text-white px-4 py-2 rounded-full text-sm font-medium">Out of Stock</span></div>` : ''}
+                    </a>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <div class="text-xs text-stone-500 mb-1">${product.category}</div>
+                        <a href="#/product/${product.id}" class="font-medium text-stone-900 mb-2 hover:text-amber-700 transition-colors line-clamp-1">${product.name}</a>
+                        <div class="flex items-center mb-4 text-amber-500 text-xs">
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                            <span class="text-stone-500 ml-1">(${product.reviews})</span>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="font-semibold text-lg">${formatPrice(product.price)}</span>
+                            <button onclick="State.addToCart('${product.id}')" ${product.stock === 0 ? 'disabled' : ''} class="p-2.5 rounded-full bg-stone-100 text-stone-900 hover:bg-stone-900 hover:text-white transition-colors disabled:opacity-50">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHome() {
+            const bestSellers = State.products.filter(p => p.featured).slice(0, 4);
+            const categories = [
+                { name: 'Home', img: '1513694203232-719a280e022f' },
+                { name: 'Desk', img: '1505843490538-5133c6c7d0e1' },
+                { name: 'Drinkware', img: '1514228742587-6b1558fcca3d' },
+                { name: 'Gifts', img: '1549465220-1a8b9238cd48' }
+            ];
+
+            DOM.app.innerHTML = `
+                <!-- Hero -->
+                <section class="relative bg-stone-200 overflow-hidden min-h-[80vh] flex items-center">
+                    <div class="absolute inset-0 z-0">
+                        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-60" />
+                    </div>
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                        <div class="max-w-xl bg-white/90 backdrop-blur-sm p-10 md:p-14 rounded-3xl shadow-2xl">
+                            <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-stone-900 mb-6 leading-tight">
+                                Simple things.<br/><span class="text-amber-700">Better living.</span>
+                            </h1>
+                            <p class="text-lg text-stone-600 mb-8 leading-relaxed">Thoughtfully selected essentials for your desk, home, and everyday life.</p>
+                            <a href="#/shop" class="inline-flex items-center justify-center px-8 py-4 font-medium transition-all bg-stone-900 text-white hover:bg-stone-800 rounded-lg text-lg">Shop Collection</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Categories -->
+                <section class="py-24 bg-stone-50">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 class="text-3xl font-bold tracking-tight mb-12">Shop by Category</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            ${categories.map(c => `
+                                <a href="#/shop?cat=${c.name}" class="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-stone-200 block">
+                                    <img src="https://images.unsplash.com/photo-${c.img}?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-90 group-hover:brightness-100" />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                    <h3 class="absolute bottom-6 left-6 text-white text-2xl font-medium">${c.name}</h3>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Best Sellers -->
+                <section class="py-24 bg-white">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="flex justify-between items-end mb-12">
+                            <h2 class="text-3xl font-bold tracking-tight">Best Sellers</h2>
+                            <a href="#/shop" class="hidden md:flex items-center text-stone-600 hover:text-stone-900 font-medium">View all <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></a>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            ${bestSellers.map(p => renderProductCard(p)).join('')}
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Newsletter -->
+                <section class="py-24 bg-stone-100">
+                    <div class="max-w-3xl mx-auto px-4 text-center">
+                        <h2 class="text-3xl font-bold tracking-tight mb-4">Get 10% off your first order</h2>
+                        <p class="text-stone-600 mb-8">Join our newsletter for exclusive offers, new arrivals, and design inspiration.</p>
+                        <form onsubmit="event.preventDefault(); this.innerHTML='<div class=\\'p-4 bg-green-100 text-green-800 rounded-xl inline-flex font-medium\\'>Thanks for subscribing!</div>';" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                            <input type="email" required placeholder="Email address" class="flex-grow px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900">
+                            <button type="submit" class="px-6 py-3 bg-stone-900 text-white font-medium rounded-xl hover:bg-stone-800">Subscribe</button>
+                        </form>
+                    </div>
+                </section>
+            `;
+        }
+
+        let shopFilters = { search: '', category: 'All', sort: 'featured', inStock: false };
+        
+        function renderShopGrid() {
+            const grid = document.getElementById('shop-grid');
+            if(!grid) return;
+            
+            let filtered = State.products
+                .filter(p => shopFilters.category === 'All' || p.category === shopFilters.category)
+                .filter(p => p.name.toLowerCase().includes(shopFilters.search.toLowerCase()))
+                .filter(p => !shopFilters.inStock || p.stock > 0);
+                
+            filtered.sort((a, b) => {
+                if (shopFilters.sort === 'price-low') return a.price - b.price;
+                if (shopFilters.sort === 'price-high') return b.price - a.price;
+                if (shopFilters.sort === 'rating') return b.rating - a.rating;
+                return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-24 bg-white rounded-2xl">
+                        <i data-lucide="package" class="w-12 h-12 text-stone-300 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-medium text-stone-900 mb-2">No products found</h3>
+                        <p class="text-stone-500">Try adjusting your filters.</p>
+                    </div>`;
+            } else {
+                grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
+            }
+            lucide.createIcons({ root: grid });
+        }
+
+        function renderShop() {
+            // Check URL params for initial category
+            const params = new URLSearchParams(window.location.hash.split('?')[1]);
+            shopFilters.category = params.get('cat') || 'All';
+
+            const categories = ['All', 'Home', 'Desk', 'Drinkware', 'Gifts'];
+
+            DOM.app.innerHTML = `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-8 w-full">
+                    <!-- Sidebar -->
+                    <div class="w-full md:w-64 flex-shrink-0" id="shop-sidebar">
+                        <div class="sticky top-28 space-y-8">
+                            <div>
+                                <h3 class="text-lg font-bold mb-4">Search</h3>
+                                <div class="relative">
+                                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"></i>
+                                    <input type="text" id="filter-search" placeholder="Find products..." class="w-full pl-10 pr-4 py-2 bg-white border border-stone-200 rounded-lg outline-none focus:border-stone-900" value="${shopFilters.search}">
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold mb-4">Categories</h3>
+                                <ul class="space-y-2" id="filter-categories">
+                                    ${categories.map(cat => `
+                                        <li><button data-cat="${cat}" class="w-full text-left transition-colors ${shopFilters.category === cat ? 'font-medium text-stone-900' : 'text-stone-500 hover:text-stone-900'}">${cat}</button></li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" id="filter-instock" class="rounded text-stone-900" ${shopFilters.inStock ? 'checked' : ''}>
+                                    <span class="text-stone-600 font-medium">In stock only</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main -->
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-8">
+                            <h1 class="text-3xl font-bold" id="shop-title">Collection</h1>
+                            <div class="relative">
+                                <select id="filter-sort" class="appearance-none bg-white border border-stone-200 rounded-lg pl-4 pr-10 py-2 outline-none focus:border-stone-900 font-medium text-sm">
+                                    <option value="featured" ${shopFilters.sort === 'featured'?'selected':''}>Featured</option>
+                                    <option value="price-low" ${shopFilters.sort === 'price-low'?'selected':''}>Price: Low to High</option>
+                                    <option value="price-high" ${shopFilters.sort === 'price-high'?'selected':''}>Price: High to Low</option>
+                                    <option value="rating" ${shopFilters.sort === 'rating'?'selected':''}>Best Rated</option>
+                                </select>
+                                <i data-lucide="arrow-up-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div id="shop-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
+                </div>
+            `;
+
+            renderShopGrid();
+
+            // Attach specific events
+            document.getElementById('filter-search').addEventListener('input', e => { shopFilters.search = e.target.value; renderShopGrid(); });
+            document.getElementById('filter-sort').addEventListener('change', e => { shopFilters.sort = e.target.value; renderShopGrid(); });
+            document.getElementById('filter-instock').addEventListener('change', e => { shopFilters.inStock = e.target.checked; renderShopGrid(); });
+            
+            document.getElementById('filter-categories').addEventListener('click', e => {
+                if(e.target.tagName === 'BUTTON') {
+                    shopFilters.category = e.target.dataset.cat;
+                    // Update UI classes
+                    document.querySelectorAll('#filter-categories button').forEach(b => {
+                        b.className = `w-full text-left transition-colors ${b.dataset.cat === shopFilters.category ? 'font-medium text-stone-900' : 'text-stone-500 hover:text-stone-900'}`;
+                    });
+                    document.getElementById('shop-title').textContent = shopFilters.category === 'All' ? 'Collection' : `Collection - ${shopFilters.category}`;
+                    renderShopGrid();
+                }
+            });
+        }
+
+        function renderProduct(id) {
+            const product = State.products.find(p => p.id === id);
+            if (!product) return DOM.app.innerHTML = '<div class="text-center py-24"><h2 class="text-2xl font-bold">Product not found</h2><a href="#/shop" class="text-blue-600">Back to Shop</a></div>';
+
+            DOM.app.innerHTML = `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+                    <a href="#/shop" class="inline-flex items-center text-sm text-stone-500 hover:text-stone-900 mb-8 font-medium">
+                        <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Back to Collection
+                    </a>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 mb-16">
+                        <div class="rounded-3xl overflow-hidden bg-stone-100 aspect-square">
+                            <img src="${product.image}" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="mb-2 text-sm font-medium text-amber-700 uppercase tracking-wider">${product.category}</div>
+                            <h1 class="text-4xl font-bold text-stone-900 mb-4 tracking-tight">${product.name}</h1>
+                            <div class="flex items-center gap-4 mb-6">
+                                <span class="text-2xl font-medium">${formatPrice(product.price)}</span>
+                                <div class="flex items-center gap-1 bg-stone-100 px-3 py-1 rounded-full text-sm font-medium">
+                                    <i data-lucide="star" class="w-4 h-4 text-amber-500 fill-current"></i> ${product.rating} <span class="text-stone-500 font-normal">(${product.reviews})</span>
+                                </div>
+                            </div>
+                            <p class="text-stone-600 text-lg leading-relaxed mb-8">${product.description}</p>
+                            
+                            <div class="mb-8">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-medium">Quantity</span>
+                                    ${product.stock > 0 ? `<span class="text-sm text-green-600 font-medium">In Stock — ${product.stock} available</span>` : `<span class="text-sm text-red-600 font-medium">Out of Stock</span>`}
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center border border-stone-300 rounded-lg overflow-hidden h-12 bg-white">
+                                        <button id="p-qty-minus" class="px-4 text-stone-500 hover:text-stone-900 transition-colors" ${product.stock===0?'disabled':''}><i data-lucide="minus" class="w-4 h-4"></i></button>
+                                        <span id="p-qty-val" class="w-12 text-center font-medium">1</span>
+                                        <button id="p-qty-plus" class="px-4 text-stone-500 hover:text-stone-900 transition-colors" ${product.stock===0?'disabled':''}><i data-lucide="plus" class="w-4 h-4"></i></button>
+                                    </div>
+                                    <button id="p-add-cart" class="flex-1 h-12 text-lg font-medium bg-stone-900 text-white rounded-lg hover:bg-stone-800 disabled:opacity-50" ${product.stock===0?'disabled':''}>
+                                        ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="border-t border-stone-200 pt-6 mt-auto">
+                                <div class="text-stone-600 text-sm leading-relaxed">
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>SKU: ${product.sku}</li>
+                                        <li>Premium materials crafted for longevity.</li>
+                                        <li>Care instructions: See product packaging.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if(product.stock > 0) {
+                let qty = 1;
+                const qtyVal = document.getElementById('p-qty-val');
+                document.getElementById('p-qty-minus').onclick = () => { if(qty > 1) qtyVal.textContent = --qty; };
+                document.getElementById('p-qty-plus').onclick = () => { if(qty < product.stock) qtyVal.textContent = ++qty; };
+                document.getElementById('p-add-cart').onclick = () => State.addToCart(product.id, qty);
+            }
+        }
+
+        function renderCart() {
+            if (State.cart.length === 0) {
+                return DOM.app.innerHTML = `
+                    <div class="max-w-3xl mx-auto px-4 py-32 text-center w-full">
+                        <i data-lucide="shopping-bag" class="w-16 h-16 text-stone-200 mx-auto mb-6"></i>
+                        <h1 class="text-3xl font-bold mb-4">Your cart is empty</h1>
+                        <p class="text-stone-500 mb-8">Looks like you haven't added anything yet.</p>
+                        <a href="#/shop" class="inline-flex px-6 py-3 bg-stone-900 text-white rounded-lg font-medium hover:bg-stone-800">Start Shopping</a>
+                    </div>`;
+            }
+
+            const subtotal = State.cart.reduce((s, i) => s + (i.product.price * i.quantity), 0);
+            const shipping = subtotal > 50 ? 0 : 5.00;
+            const tax = subtotal * 0.07;
+            const total = subtotal + shipping + tax;
+
+            DOM.app.innerHTML = `
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+                    <h1 class="text-3xl font-bold mb-8">Shopping Cart</h1>
+                    <div class="flex flex-col lg:flex-row gap-12">
+                        <div class="flex-grow">
+                            <ul class="divide-y divide-stone-200 border-t border-stone-200">
+                                ${State.cart.map(item => `
+                                    <li class="py-6 flex gap-6">
+                                        <a href="#/product/${item.product.id}" class="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 bg-stone-100 rounded-xl overflow-hidden block">
+                                            <img src="${item.product.image}" class="w-full h-full object-cover">
+                                        </a>
+                                        <div class="flex-grow flex flex-col justify-between">
+                                            <div>
+                                                <div class="flex justify-between mb-1">
+                                                    <a href="#/product/${item.product.id}" class="font-bold text-stone-900 hover:text-amber-700">${item.product.name}</a>
+                                                    <p class="font-bold">${formatPrice(item.product.price * item.quantity)}</p>
+                                                </div>
+                                                <p class="text-sm text-stone-500">${formatPrice(item.product.price)} each</p>
+                                            </div>
+                                            <div class="flex justify-between items-center mt-4">
+                                                <div class="flex items-center border border-stone-300 rounded-lg overflow-hidden bg-white">
+                                                    <button onclick="State.updateCartQty('${item.product.id}', ${item.quantity - 1}); router();" class="p-2 text-stone-500 hover:bg-stone-100"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                                                    <span class="w-8 text-center text-sm font-medium">${item.quantity}</span>
+                                                    <button onclick="State.updateCartQty('${item.product.id}', ${item.quantity + 1}); router();" class="p-2 text-stone-500 hover:bg-stone-100"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                                                </div>
+                                                <button onclick="State.removeFromCart('${item.product.id}'); router();" class="text-sm text-red-600 font-medium hover:text-red-800 flex items-center">
+                                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                        <div class="w-full lg:w-[400px] flex-shrink-0">
+                            <div class="bg-stone-100 rounded-2xl p-8 sticky top-28">
+                                <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+                                <div class="space-y-4 text-sm text-stone-600 mb-6">
+                                    <div class="flex justify-between"><span>Subtotal</span><span class="text-stone-900 font-medium">${formatPrice(subtotal)}</span></div>
+                                    <div class="flex justify-between"><span>Shipping</span><span class="text-stone-900 font-medium">${shipping === 0 ? 'Free' : formatPrice(shipping)}</span></div>
+                                    <div class="flex justify-between"><span>Estimated Tax</span><span class="text-stone-900 font-medium">${formatPrice(tax)}</span></div>
+                                </div>
+                                <div class="border-t border-stone-300 pt-4 mb-8">
+                                    <div class="flex justify-between items-center text-lg font-bold text-stone-900">
+                                        <span>Total</span><span>${formatPrice(total)}</span>
+                                    </div>
+                                </div>
+                                <a href="#/checkout" class="w-full block text-center px-6 py-3 bg-stone-900 text-white rounded-lg font-medium hover:bg-stone-800 mb-4">Proceed to Checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let checkoutData = { firstName:'Jane', lastName:'Doe', email:'jane@example.com', address:'123 Lane', city:'City', state:'CA', zip:'90210' };
+
+        function renderCheckout() {
+            if (State.cart.length === 0) return window.location.hash = '#/cart';
+
+            const subtotal = State.cart.reduce((s, i) => s + (i.product.price * i.quantity), 0);
+            const total = subtotal * 1.07 + (subtotal > 50 ? 0 : 5);
+
+            DOM.app.innerHTML = `
+                <div class="max-w-6xl mx-auto px-4 py-12 flex flex-col md:flex-row gap-12 w-full">
+                    <div class="flex-grow">
+                        <div class="bg-white rounded-2xl shadow-sm border border-stone-100 p-8">
+                            <h2 class="text-2xl font-bold mb-2">Demo Checkout</h2>
+                            <p class="text-stone-500 mb-8">Please review your pre-filled dummy information.</p>
+                            
+                            <form id="demo-checkout-form" class="space-y-6">
+                                <div>
+                                    <h3 class="font-bold mb-4">1. Contact & Shipping</h3>
+                                    <div class="grid grid-cols-2 gap-4 mb-4">
+                                        <input required class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900" placeholder="First Name" value="${checkoutData.firstName}">
+                                        <input required class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900" placeholder="Last Name" value="${checkoutData.lastName}">
+                                    </div>
+                                    <input required type="email" class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900 mb-4" placeholder="Email Address" value="${checkoutData.email}">
+                                    <input required class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900 mb-4" placeholder="Street Address" value="${checkoutData.address}">
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <input required class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900" placeholder="City" value="${checkoutData.city}">
+                                        <input required class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900" placeholder="State" value="${checkoutData.state}">
+                                        <input required class="w-full px-4 py-2 border border-stone-300 rounded-lg outline-none focus:border-stone-900" placeholder="ZIP" value="${checkoutData.zip}">
+                                    </div>
+                                </div>
+                                
+                                <div class="pt-6 border-t border-stone-200">
+                                    <h3 class="font-bold mb-4">2. Payment (Simulated)</h3>
+                                    <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg mb-4 text-sm flex items-start">
+                                        <i data-lucide="info" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+                                        This is a demo. No real payment will be processed.
+                                    </div>
+                                    <div class="border border-stone-900 rounded-xl p-4 bg-stone-50 ring-1 ring-stone-900 flex items-center">
+                                        <i data-lucide="credit-card" class="w-6 h-6 mr-3 text-stone-700"></i>
+                                        <span class="font-medium flex-grow">Demo Credit Card</span>
+                                        <div class="w-4 h-4 rounded-full border-4 border-stone-900 bg-white"></div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="w-full py-4 bg-stone-900 text-white rounded-lg font-bold text-lg hover:bg-stone-800">Place Demo Order</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full md:w-[380px] flex-shrink-0">
+                        <div class="bg-stone-100 rounded-2xl p-6 sticky top-28">
+                            <h3 class="font-bold mb-4">Order Summary</h3>
+                            <ul class="space-y-4 mb-6">
+                                ${State.cart.map(item => `
+                                    <li class="flex gap-4 text-sm">
+                                        <div class="w-16 h-16 bg-white rounded-md overflow-hidden flex-shrink-0 relative border border-stone-200">
+                                            <img src="${item.product.image}" class="w-full h-full object-cover">
+                                            <span class="absolute -top-2 -right-2 bg-stone-900 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">${item.quantity}</span>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <p class="font-medium line-clamp-1">${item.product.name}</p>
+                                            <p class="text-stone-500">${formatPrice(item.product.price)}</p>
+                                        </div>
+                                        <div class="font-medium">${formatPrice(item.product.price * item.quantity)}</div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                            <div class="border-t border-stone-300 pt-4 flex justify-between font-bold text-lg">
+                                <span>Total</span><span>${formatPrice(total)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('demo-checkout-form').onsubmit = (e) => {
+                e.preventDefault();
+                const inputs = e.target.querySelectorAll('input');
+                const customer = { name: `${inputs[0].value} ${inputs[1].value}`, email: inputs[2].value };
+                const address = { street: inputs[3].value, city: inputs[4].value, state: inputs[5].value, zip: inputs[6].value };
+                const orderId = State.placeOrder(customer, address);
+                window.location.hash = `#/order-confirmation/${orderId}`;
+            };
+        }
+
+        function renderOrderConfirmation(id) {
+            DOM.app.innerHTML = `
+                <div class="max-w-2xl mx-auto px-4 py-24 text-center w-full">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <i data-lucide="check" class="w-10 h-10 text-green-600"></i>
+                    </div>
+                    <h1 class="text-4xl font-bold mb-4">Thank you for your order!</h1>
+                    <p class="text-xl text-stone-600 mb-8">Your demo order has been placed successfully.</p>
+                    <div class="bg-white border border-stone-200 rounded-2xl p-8 mb-8 inline-block text-left w-full max-w-md shadow-sm">
+                        <p class="text-sm text-stone-500 uppercase tracking-wide font-bold mb-1">Order Number</p>
+                        <p class="text-2xl font-bold text-stone-900 mb-4">${id}</p>
+                        <p class="text-sm text-stone-600">Inventory has been automatically reduced.</p>
+                    </div>
+                    <div>
+                        <a href="#/shop" class="inline-flex px-6 py-3 bg-stone-900 text-white rounded-lg font-medium mr-4">Continue Shopping</a>
+                        <a href="#/account" class="inline-flex px-6 py-3 border-2 border-stone-200 text-stone-900 rounded-lg font-medium hover:border-stone-900">View Account</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAccount() {
+            DOM.app.innerHTML = `
+                <div class="max-w-5xl mx-auto px-4 py-12 w-full">
+                    <h1 class="text-3xl font-bold mb-8">My Account</h1>
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="w-full md:w-64 flex-shrink-0">
+                            <ul class="space-y-1">
+                                <li><a href="#/account" class="block w-full px-4 py-2 bg-stone-900 text-white rounded-lg font-medium">Order History</a></li>
+                                <li><a href="#/admin" class="block w-full px-4 py-2 text-amber-700 font-medium hover:bg-stone-100 rounded-lg mt-4 flex items-center border border-amber-200 bg-amber-50"><i data-lucide="settings" class="w-4 h-4 mr-2"></i> Admin Dashboard</a></li>
+                            </ul>
+                        </div>
+                        <div class="flex-grow bg-white border border-stone-200 rounded-2xl p-8 shadow-sm">
+                            <h2 class="text-2xl font-bold mb-6">Order History</h2>
+                            ${State.orders.length === 0 ? '<p class="text-stone-500">No orders yet.</p>' : `
+                                <div class="space-y-6">
+                                    ${State.orders.map(o => `
+                                        <div class="border border-stone-200 rounded-xl p-6">
+                                            <div class="flex flex-wrap justify-between items-center mb-4 pb-4 border-b border-stone-100 gap-4">
+                                                <div><span class="font-bold block">${o.id}</span><span class="text-sm text-stone-500">${new Date(o.date).toLocaleDateString()}</span></div>
+                                                <div><span class="text-sm text-stone-500 block">Total Amount</span><span class="font-bold">${formatPrice(o.total)}</span></div>
+                                                <div><span class="px-2.5 py-1 rounded-full text-xs font-bold ${o.status==='Delivered'?'bg-green-100 text-green-800': o.status==='Cancelled'?'bg-red-100 text-red-800':'bg-amber-100 text-amber-800'}">${o.status}</span></div>
+                                            </div>
+                                            <ul class="space-y-3">
+                                                ${o.items.map(i => `
+                                                    <li class="flex items-center text-sm">
+                                                        <img src="${i.product.image}" class="w-10 h-10 rounded bg-stone-100 object-cover mr-4">
+                                                        <span class="flex-grow font-medium">${i.product.name}</span>
+                                                        <span class="text-stone-500">Qty: ${i.quantity}</span>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAdminLayout(view) {
+            const navItems = [
+                { id: 'dashboard', name: 'Overview', icon: 'layout-dashboard' },
+                { id: 'products', name: 'Products', icon: 'package' },
+                { id: 'inventory', name: 'Inventory', icon: 'layers' },
+                { id: 'orders', name: 'Orders', icon: 'shopping-bag' }
+            ];
+
+            let content = '';
+            switch(view) {
+                case 'dashboard': content = getAdminDashboard(); break;
+                case 'products': content = getAdminProducts(); break;
+                case 'inventory': content = getAdminInventory(); break;
+                case 'orders': content = getAdminOrders(); break;
+                default: content = getAdminDashboard();
+            }
+
+            DOM.app.innerHTML = `
+                <div class="flex h-screen bg-stone-100 w-full overflow-hidden">
+                    <aside class="w-64 bg-stone-900 text-stone-300 flex flex-col flex-shrink-0">
+                        <div class="h-20 flex items-center px-6 border-b border-stone-800">
+                            <span class="text-xl font-bold text-white tracking-tighter">NOVA Admin</span>
+                        </div>
+                        <nav class="flex-1 py-6 px-4 space-y-1">
+                            ${navItems.map(item => `
+                                <a href="#/admin/${item.id}" class="flex items-center px-4 py-3 text-sm rounded-lg transition-colors ${view === item.id ? 'bg-amber-700 text-white font-medium shadow-md' : 'hover:bg-stone-800 hover:text-white'}">
+                                    <i data-lucide="${item.icon}" class="w-5 h-5 mr-3 ${view === item.id ? 'text-white' : 'text-stone-400'}"></i> ${item.name}
+                                </a>
+                            `).join('')}
+                        </nav>
+                        <div class="p-4 border-t border-stone-800">
+                            <a href="#/" class="flex items-center px-4 py-2 text-sm text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg"><i data-lucide="chevron-left" class="w-4 h-4 mr-2"></i> Storefront</a>
+                        </div>
+                    </aside>
+                    <main class="flex-1 flex flex-col overflow-hidden">
+                        <header class="h-20 bg-white border-b border-stone-200 flex items-center px-8 flex-shrink-0 shadow-sm"><h2 class="text-xl font-bold text-stone-800 capitalize">${view}</h2></header>
+                        <div class="flex-1 overflow-auto p-8"><div class="max-w-6xl mx-auto">${content}</div></div>
+                    </main>
+                </div>
+            `;
+            
+            // Attach admin specific events if necessary
+            if (view === 'products') attachAdminProductEvents();
+            if (view === 'inventory') attachAdminInventoryEvents();
+            if (view === 'orders') attachAdminOrderEvents();
+        }
+
+        function getAdminDashboard() {
+            const totalSales = State.orders.reduce((s, o) => s + o.total, 0);
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-100 flex items-center">
+                        <div class="w-12 h-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mr-4"><i data-lucide="dollar-sign"></i></div>
+                        <div><p class="text-sm text-stone-500 font-medium">Total Sales</p><h3 class="text-2xl font-bold text-stone-900">${formatPrice(totalSales)}</h3></div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-100 flex items-center">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-4"><i data-lucide="shopping-bag"></i></div>
+                        <div><p class="text-sm text-stone-500 font-medium">Total Orders</p><h3 class="text-2xl font-bold text-stone-900">${State.orders.length}</h3></div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-100 flex items-center">
+                        <div class="w-12 h-12 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mr-4"><i data-lucide="package"></i></div>
+                        <div><p class="text-sm text-stone-500 font-medium">Products</p><h3 class="text-2xl font-bold text-stone-900">${State.products.length}</h3></div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                    <div class="p-6 border-b border-stone-100"><h3 class="font-bold text-lg">Recent Orders</h3></div>
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-stone-50 text-stone-500"><tr><th class="px-6 py-4 font-medium">Order ID</th><th class="px-6 py-4 font-medium">Customer</th><th class="px-6 py-4 font-medium">Total</th><th class="px-6 py-4 font-medium">Status</th></tr></thead>
+                        <tbody class="divide-y divide-stone-100">
+                            ${State.orders.slice(0, 5).map(o => `
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">${o.id}</td>
+                                    <td class="px-6 py-4">${o.customer.name}</td>
+                                    <td class="px-6 py-4 font-medium">${formatPrice(o.total)}</td>
+                                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs font-medium bg-stone-100">${o.status}</span></td>
+                                </tr>
+                            `).join('')}
+                            ${State.orders.length === 0 ? '<tr><td colSpan="4" class="px-6 py-4 text-center text-stone-500">No orders yet.</td></tr>' : ''}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function getAdminProducts() {
+            return `
+                <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                    <div class="p-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+                        <h3 class="font-bold text-lg">Product Catalog</h3>
+                        <button id="admin-add-product" class="px-4 py-2 bg-stone-900 text-white rounded-lg font-medium hover:bg-stone-800 text-sm flex items-center"><i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add Product</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-white text-stone-500 border-b border-stone-100">
+                                <tr><th class="px-6 py-4 font-medium">Product</th><th class="px-6 py-4 font-medium">Category</th><th class="px-6 py-4 font-medium">Price</th><th class="px-6 py-4 font-medium text-right">Actions</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100">
+                                ${State.products.map(p => `
+                                    <tr class="hover:bg-stone-50">
+                                        <td class="px-6 py-4 flex items-center"><img src="${p.image}" class="w-10 h-10 rounded object-cover mr-3"><span class="font-medium text-stone-900">${p.name}</span></td>
+                                        <td class="px-6 py-4"><span class="bg-stone-100 px-2 py-1 rounded text-xs font-medium">${p.category}</span></td>
+                                        <td class="px-6 py-4 font-medium">${formatPrice(p.price)}</td>
+                                        <td class="px-6 py-4 text-right">
+                                            <button class="admin-edit-product text-amber-700 font-medium mr-3" data-id="${p.id}">Edit</button>
+                                            <button class="admin-del-product text-red-600 font-medium" data-id="${p.id}">Delete</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Modal Container -->
+                <div id="product-modal" class="fixed inset-0 bg-stone-900/50 z-50 hidden items-center justify-center backdrop-blur-sm modal-enter"></div>
+            `;
+        }
+
+        function openProductModal(id = null) {
+            const product = id ? State.products.find(p => p.id === id) : { name:'', price:0, category:'Home', sku:'', stock:10, image:'', description:'' };
+            const modal = document.getElementById('product-modal');
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md w-full m-4 shadow-2xl relative">
+                    <h3 class="text-xl font-bold mb-6">${id ? 'Edit Product' : 'Add New Product'}</h3>
+                    <form id="product-form" class="space-y-4 text-sm">
+                        <input type="hidden" id="pm-id" value="${id || ''}">
+                        <div><label class="block font-medium mb-1">Name</label><input required id="pm-name" class="w-full px-3 py-2 border rounded-lg" value="${product.name}"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="block font-medium mb-1">Price</label><input required type="number" step="0.01" id="pm-price" class="w-full px-3 py-2 border rounded-lg" value="${product.price}"></div>
+                            <div><label class="block font-medium mb-1">Stock</label><input required type="number" id="pm-stock" class="w-full px-3 py-2 border rounded-lg" value="${product.stock}"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="block font-medium mb-1">SKU</label><input required id="pm-sku" class="w-full px-3 py-2 border rounded-lg" value="${product.sku}"></div>
+                            <div><label class="block font-medium mb-1">Category</label>
+                                <select id="pm-cat" class="w-full px-3 py-2 border rounded-lg bg-white">
+                                    ${['Home','Desk','Drinkware','Gifts'].map(c => `<option ${c===product.category?'selected':''}>${c}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        <div><label class="block font-medium mb-1">Image URL</label><input required id="pm-img" class="w-full px-3 py-2 border rounded-lg" value="${product.image}"></div>
+                        <div class="flex gap-4 pt-4">
+                            <button type="button" onclick="document.getElementById('product-modal').classList.replace('flex','hidden')" class="flex-1 py-2 border border-stone-200 rounded-lg font-medium hover:bg-stone-50">Cancel</button>
+                            <button type="submit" class="flex-1 py-2 bg-stone-900 text-white rounded-lg font-medium hover:bg-stone-800">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            modal.classList.replace('hidden', 'flex');
+            
+            document.getElementById('product-form').onsubmit = (e) => {
+                e.preventDefault();
+                State.saveProduct({
+                    id: document.getElementById('pm-id').value || null,
+                    name: document.getElementById('pm-name').value,
+                    price: parseFloat(document.getElementById('pm-price').value),
+                    stock: parseInt(document.getElementById('pm-stock').value),
+                    sku: document.getElementById('pm-sku').value,
+                    category: document.getElementById('pm-cat').value,
+                    image: document.getElementById('pm-img').value,
+                    description: product.description || 'A beautiful addition to your collection.'
+                });
+                modal.classList.replace('flex', 'hidden');
+                router(); // re-render
+                showToast('Product saved');
+            };
+        }
+
+        function attachAdminProductEvents() {
+            document.getElementById('admin-add-product').onclick = () => openProductModal();
+            document.querySelectorAll('.admin-edit-product').forEach(btn => btn.onclick = (e) => openProductModal(e.target.dataset.id));
+            document.querySelectorAll('.admin-del-product').forEach(btn => btn.onclick = (e) => {
+                if(confirm('Delete product?')) { State.deleteProduct(e.target.dataset.id); router(); showToast('Product deleted'); }
+            });
+        }
+
+        function getAdminInventory() {
+            return `
+                <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                    <div class="p-6 border-b border-stone-100 bg-stone-50/50">
+                        <h3 class="font-bold text-lg">Inventory Management</h3>
+                        <p class="text-sm text-stone-500 mt-1">Changes save automatically.</p>
+                    </div>
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-white text-stone-500 border-b border-stone-100">
+                            <tr><th class="px-6 py-4 font-medium">Product</th><th class="px-6 py-4 font-medium">SKU</th><th class="px-6 py-4 font-medium w-48">Stock Quantity</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            ${State.products.map(p => `
+                                <tr class="hover:bg-stone-50">
+                                    <td class="px-6 py-4 font-medium text-stone-900 line-clamp-1">${p.name}</td>
+                                    <td class="px-6 py-4 text-stone-500">${p.sku}</td>
+                                    <td class="px-6 py-4">
+                                        <input type="number" min="0" value="${p.stock}" data-id="${p.id}" class="admin-stock-input w-24 px-3 py-1 border border-stone-300 rounded focus:border-stone-900 outline-none text-right font-medium">
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        function attachAdminInventoryEvents() {
+            document.querySelectorAll('.admin-stock-input').forEach(input => {
+                input.onchange = (e) => { State.updateProductStock(e.target.dataset.id, e.target.value); showToast('Inventory updated', 'info'); };
+            });
+        }
+
+        function getAdminOrders() {
+            return `
+                <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                    <div class="p-6 border-b border-stone-100 bg-stone-50/50"><h3 class="font-bold text-lg">Order Management</h3></div>
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-white text-stone-500 border-b border-stone-100">
+                            <tr><th class="px-6 py-4 font-medium">Order ID</th><th class="px-6 py-4 font-medium">Customer</th><th class="px-6 py-4 font-medium">Total</th><th class="px-6 py-4 font-medium">Status Update</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            ${State.orders.map(o => `
+                                <tr class="hover:bg-stone-50">
+                                    <td class="px-6 py-4 font-bold text-stone-900">${o.id}</td>
+                                    <td class="px-6 py-4"><div>${o.customer.name}</div><div class="text-xs text-stone-400">${o.customer.email}</div></td>
+                                    <td class="px-6 py-4 font-medium">${formatPrice(o.total)}</td>
+                                    <td class="px-6 py-4">
+                                        <select data-id="${o.id}" class="admin-order-status px-3 py-1.5 border rounded-lg text-sm font-medium outline-none bg-white">
+                                            ${['Processing', 'Shipped', 'Delivered', 'Cancelled'].map(s => `<option ${o.status===s?'selected':''}>${s}</option>`).join('')}
+                                        </select>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                            ${State.orders.length === 0 ? '<tr><td colSpan="4" class="px-6 py-12 text-center text-stone-500 text-lg">No orders found.</td></tr>' : ''}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        function attachAdminOrderEvents() {
+            document.querySelectorAll('.admin-order-status').forEach(select => {
+                select.onchange = (e) => { State.updateOrderStatus(e.target.dataset.id, e.target.value); showToast('Order status updated'); };
+            });
+        }
+
+        window.addEventListener('hashchange', router);
+        
+        DOM.mobileMenuBtn.addEventListener('click', () => {
+            DOM.mobileMenu.classList.toggle('hidden');
+        });
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            State.init();
+            router();
+        });
+    </script>
+</body>
+</html>
